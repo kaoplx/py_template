@@ -38,8 +38,19 @@ def parse_cdp_neighbors(command_output):
     работать и с файлами и с выводом с оборудования.
     Плюс учимся работать с таким выводом.
     """
+    device_name = command_output.strip().split("\n")[0]
+    device_name = device_name.split(">")[0]
+
+    neighbor = command_output.split('Port ID')[1].strip().split('\n')
+    res_dict={}
+    for item in neighbor:
+        l_item = item.split()
+        key = (device_name , l_item[1] + l_item[2])
+        res_dict[key] = (l_item[0] , l_item[-2] + l_item[-1])
+
+    return res_dict
 
 
 if __name__ == "__main__":
-    with open("sh_cdp_n_sw1.txt") as f:
+    with open(r"C:\Users\ale-k\OneDrive\Desktop\gittest\py_template-1\exercises\11_modules\sh_cdp_n_sw1.txt") as f:
         print(parse_cdp_neighbors(f.read()))

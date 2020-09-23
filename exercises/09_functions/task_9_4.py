@@ -35,3 +35,21 @@ def ignore_command(command, ignore):
     * False - если нет
     """
     return any(word in command for word in ignore)
+
+def convert_config_to_dict(config_filename):
+    command_uplevel_dict={}
+    val=[]
+    with open(config_filename , 'r') as f:
+        for line in f:
+            if (ignore_command(line, ignore) == False) and (line[0] != ' ') and (line[0] != '!'):
+                key = line.rstrip().strip('\n')
+                val=[]
+                command_uplevel_dict[key] = val
+            elif (ignore_command(line, ignore) == False) and (line[0] != '!') and (line != '\n'):
+                val.append(f'{line.rstrip()}')
+                command_uplevel_dict[key] = val
+
+    return command_uplevel_dict
+
+file_name=r'C:\Users\ale-k\OneDrive\Desktop\gittest\py_template-1\exercises\09_functions\config_sw1.txt'
+print(convert_config_to_dict(file_name))

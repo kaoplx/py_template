@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from draw_network_graph import *
 """
 Задание 11.2
 
@@ -44,8 +45,32 @@ Cгенерировать топологию, которая соответст�
 
 # эти заготовки написаны чтобы показать в какой момент должна
 # рисоваться топология (после вызова функции)
+
 def create_network_map(filenames):
-    pass
+    d = {}
+    for filename in filenames:
+        with open(r"C:\Users\ale-k\OneDrive\Desktop\gittest\py_template-1\exercises\11_modules\\" + filename , 'r') as f:
+            '''получаем имя своего устройства'''
+            string = f.read()
+            f.close()
+            device_name = string.strip().split('\n')[0]
+            device_name = device_name.split(">")[0]
+            '''формируем словарь'''
+            parse_str = string.strip().split('Port ID')[1].strip().split('\n')
+            
+            for item in parse_str:
+                l_item = item.split()
+                key = (device_name , l_item[1] + l_item[2])
+                d[key] = (l_item[0] , l_item[-2] + l_item[-1])
+    list_item=[]
+    for item in d.keys():
+        list_item.append(item)
+    for item in list_item:
+        if item in d.values():
+            del d[item]
+    return  d
+
+    
 
 
 if __name__ == "__main__":
@@ -58,4 +83,4 @@ if __name__ == "__main__":
 
     topology = create_network_map(infiles)
     # рисуем топологию:
-    # draw_topology(topology)
+    draw_topology(topology)

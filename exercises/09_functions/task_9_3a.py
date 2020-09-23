@@ -23,3 +23,31 @@
 
 Ограничение: Все задания надо выполнять используя только пройденные темы.
 """
+def get_int_vlan_map(config_filename):
+    access_dict = {}
+    trunk_dict = {}
+    with open(config_filename , 'r') as f:
+        for line in f:
+            if 'FastEthernet' in line:
+                key = line.rstrip().strip('\n').split()[-1:]
+            elif 'switchport access vlan ' in line:
+                val = line.rstrip().strip('\n[]').split()[-1:]
+                access_dict[str(key).strip("[]'")] = int(str(val).strip("\n[]'"))
+            elif 'switchport mode access'in line:
+                val = 1
+                access_dict[str(key).strip("[]'")] = val
+        f.seek(0)
+        for line in f:
+            value = []
+            if 'FastEthernet' in line:
+                key = line.rstrip().strip('\n').split()[-1:]
+            elif 'trunk allowed vlan' in line:
+                val = line.strip("\n").split(" ")[-1].split(',')
+                for item in val:
+                    value.append(int(item))
+                trunk_dict[str(key).strip('[]"\'')] = value
+    return (access_dict , trunk_dict)
+
+file_name=r'C:\Users\ale-k\OneDrive\Desktop\gittest\py_template-1\exercises\09_functions\config_sw2.txt'
+
+print(get_int_vlan_map(file_name))
